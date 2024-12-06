@@ -1,0 +1,41 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 10086
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/workFlow?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: admin
+    password: 123456
+    #连接池类型改为druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      #初始化连接数
+      initial-size: 5
+      #最小连接数
+      min-idle: 10
+      #最大连接数
+      max-active: 100
+      #获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      #检测连接是否有效
+      validation-query: SELECT 1 FROM DUAL
+      test-on-borrow: false
+      test-on-return: false
+      #检查空闲连接有效性
+      test-while-idle: true
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-victable-idle-time-millis: 300000
+      #查询超时时间 单位是毫秒
+      query-timeout: 60000
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录:单位秒
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
