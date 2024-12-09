@@ -57,12 +57,12 @@ public class DemoController {
     @Resource
     private IdentityService identityService;
     /**
-     * 是可选服务。提供简单的表单功能
+     * 是可选服务。提供简单的表单功能(未注入)
      * <br/> - 引入了开始表单(start form)与任务表单(task form)的概念。
      * <br/> - 开始表单是在流程实例启动前显示的表单，而任务表单是用户完成任务时显示的表单。
      */
-    @Resource
-    private FormService formService;
+    //@Resource
+    //private FormService formService;
     /**
      * 查询Flowable引擎收集的所有历史数据。 运行期的数据会同步至历史数据表, 因此运行期的数据表始终保持在一个比较低的数据量, 而历史表则越来越大
      * <br/> - 流程实例启动时间

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:flowable="http://flowable.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://www.flowable.org/processdef">
+    <!--        简单的工作流执行，只存在顺序流向，且只用到了flowable:assignee受理人功能 -->
+    <process id="simpleProcess" name="Simple Process">
+        <!--        开始节点    -->
+        <startEvent id="startEvent" name="Start"/>
+        <!--        提交请求任务 -->
+        <userTask id="submitRequestTask" name="Submit Request" flowable:assignee="${initiator}"/>
+        <!--        顺序流向 -->
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="submitRequestTask"/>
+        <!--        批准请求任务-->
+        <userTask id="approveRequestTask" name="Approve Request" flowable:assignee="${approver}"/>
+        <!--        顺序流向 -->
+        <sequenceFlow id="flow2" sourceRef="submitRequestTask" targetRef="approveRequestTask"/>
+        <!--        结束节点    -->
+        <endEvent id="endEvent" name="End"/>
+        <!--        顺序流向 -->
+        <sequenceFlow id="flow3" sourceRef="approveRequestTask" targetRef="endEvent"/>
+    </process>
+</definitions>
