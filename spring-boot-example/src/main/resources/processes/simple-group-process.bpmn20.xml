@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:flowable="http://flowable.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://www.flowable.org/processdef">
+    <process id="simpleGroupProcess" name="Leave Request Process" isExecutable="true">
+        <startEvent id="startEvent" name="Start"/>
+        <userTask id="submitRequestTask" name="Submit Request" flowable:candidateGroups="${initiators}"/>
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="submitRequestTask"/>
+        <userTask id="approveRequestTask" name="Approve Request" flowable:candidateGroups="${approvers}"/>
+        <sequenceFlow id="flow2" sourceRef="submitRequestTask" targetRef="approveRequestTask"/>
+        <endEvent id="endEvent" name="End"/>
+        <sequenceFlow id="flow3" sourceRef="approveRequestTask" targetRef="endEvent"/>
+    </process>
+</definitions>
