@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:flowable="http://flowable.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://www.flowable.org/processdef">
+    <process id="simpleReturnProcess" name="Leave Request Process" isExecutable="true">
+        <startEvent id="startEvent" name="Start"/>
+
+        <!--        申请人任务-->
+        <userTask id="submitRequestTask" name="Submit Request" flowable:assignee="${initiator}">
+            <extensionElements>
+                <flowable:formProperty id="applicationData" name="申请内容" type="string" required="true"/>
+            </extensionElements>
+        </userTask>
+
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="submitRequestTask"/>
+
+        <!--        审批人任务-->
+        <userTask id="approveRequestTask" name="Approve Request" flowable:assignee="${approver}">
+            <extensionElements>
+                <flowable:formProperty id="approvalDecision" name="审批决策" type="enum" required="true">
+                    <flowable:value id="approve" name="通过"/>
+                    <flowable:value id="reject" name="驳回"/>
+                </flowable:formProperty>
+            </extensionElements>
+        </userTask>
+
+        <sequenceFlow id="flow2" sourceRef="submitRequestTask" targetRef="approveRequestTask"/>
+
+        <endEvent id="endEvent" name="End"/>
+
+        <!-- 正常审批通过 -->
+        <sequenceFlow id="flowApprove" sourceRef="approveRequestTask" targetRef="endEvent">
+            <conditionExpression xsi:type="tFormalExpression">${approvalDecision == 'approve'}</conditionExpression>
+        </sequenceFlow>
+
+        <!-- 驳回操作 -->
+        <sequenceFlow id="flowReject" sourceRef="approveRequestTask" targetRef="submitRequestTask">
+            <conditionExpression xsi:type="tFormalExpression">${approvalDecision == 'reject'}</conditionExpression>
+        </sequenceFlow>
+
+    </process>
+</definitions>
