@@ -1,6 +1,6 @@
 package org.flowable.examples.spring.boot;
 
-import org.flowable.examples.spring.boot.service.SimpleReturnProcessService;
+import org.flowable.examples.spring.boot.service.SimpleCodeProcessService;
 import org.flowable.task.api.Task;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,24 +9,32 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * simple-group-process.bpmn20.xml 文件对应执行测试类
+ * simple-group-process-v2.bpmn20.xml 文件对应执行测试类
  *
  * @author xuwentao
  * @date 2024/12/12
  * @since 2.0.0
  */
 @SpringBootTest
-public class SimpleReturnProcessTests {
+class SimpleCodeProcessTests {
 
     @Resource
-    private SimpleReturnProcessService simpleReturnProcessService;
+    private SimpleCodeProcessService SimpleCodeProcessService;
+
+    /**
+     * 通过代码初始化 simple-group-process-v2.bpmn20.xml
+     */
+    @Test
+    void deploySimpleReturnProcess() {
+        SimpleCodeProcessService.deploySimpleReturnProcess();
+    }
 
     /**
      * 提交一个 申请人(initiator)、审批人(approver)的任务
      */
     @Test
     void submitApplication() {
-        simpleReturnProcessService.submitApplication("initiator", "approver");
+        SimpleCodeProcessService.submitApplication("initiator", "approver");
     }
 
     /**
@@ -35,10 +43,10 @@ public class SimpleReturnProcessTests {
     @Test
     void submitRequestTask() {
         String userId = "initiator";
-        List<Task> initiatorTask = simpleReturnProcessService.getUserTasks(userId);
+        List<Task> initiatorTask = SimpleCodeProcessService.getUserTasks(userId);
 
         for (Task task : initiatorTask) {
-            simpleReturnProcessService.completeTask(task.getId(), userId);
+            SimpleCodeProcessService.completeTask(task.getId(), userId);
         }
     }
 
@@ -49,10 +57,10 @@ public class SimpleReturnProcessTests {
     void approveRequestTask() {
         String userId = "approver";
         String decision = "approve"; // 驳回操作
-        List<Task> approverTask = simpleReturnProcessService.getUserTasks(userId);
+        List<Task> approverTask = SimpleCodeProcessService.getUserTasks(userId);
 
         for (Task task : approverTask) {
-            simpleReturnProcessService.approveApplication(task.getId(), userId, decision);
+            SimpleCodeProcessService.approveApplication(task.getId(), userId, decision);
         }
     }
 
@@ -65,11 +73,10 @@ public class SimpleReturnProcessTests {
     void returnRequestTask() {
         String userId = "approver";
         String decision = "reject"; // 驳回操作
-        List<Task> approverTask = simpleReturnProcessService.getUserTasks(userId);
+        List<Task> approverTask = SimpleCodeProcessService.getUserTasks(userId);
 
         for (Task task : approverTask) {
-            simpleReturnProcessService.approveApplication(task.getId(), userId, decision);
+            SimpleCodeProcessService.approveApplication(task.getId(), userId, decision);
         }
     }
-
 }
